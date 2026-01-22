@@ -1,5 +1,7 @@
-import aiosqlite
 import logging
+
+import aiosqlite
+
 from config import DATABASE_PATH
 
 logger = logging.getLogger(__name__)
@@ -30,7 +32,8 @@ async def is_notified(deadline_id: str) -> bool:
 async def mark_as_notified(deadline_id: str, title: str, due_date: int):
     async with aiosqlite.connect(DATABASE_PATH) as db:
         await db.execute(
-            "INSERT INTO sent_notifications (deadline_id, title, due_date) VALUES (?, ?, ?)",
+            "INSERT INTO sent_notifications (deadline_id, title, due_date) "
+            "VALUES (?, ?, ?)",
             (deadline_id, title, due_date),
         )
         await db.commit()

@@ -1,6 +1,5 @@
-import logging
 import datetime
-from typing import List, Dict
+import logging
 
 logger = logging.getLogger(__name__)
 
@@ -13,7 +12,7 @@ class MockMoodleClient:
     def authenticate(self) -> bool:
         return True
 
-    def get_upcoming_deadlines(self) -> List[Dict]:
+    def get_upcoming_deadlines(self) -> list[dict]:
         """Return some fake deadlines for testing."""
         now = datetime.datetime.now().timestamp()
         return [

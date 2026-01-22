@@ -1,14 +1,23 @@
-import asyncio
-import logging
-import datetime
 import argparse
+import asyncio
+import datetime
+import logging
 from zoneinfo import ZoneInfo
+
+from typing import Any, Protocol
+
 from apscheduler.schedulers.asyncio import AsyncIOScheduler
+
 from config import CHECK_INTERVAL_HOURS, TIMEZONE
-from moodle_client import MoodleClient
-from mock_moodle_client import MockMoodleClient
-from telegram_bot import TelegramNotifier
 from database import init_db, is_notified, mark_as_notified
+from mock_moodle_client import MockMoodleClient
+from moodle_client import MoodleClient
+from telegram_bot import TelegramNotifier
+
+
+class MoodleClientInterface(Protocol):
+    def get_upcoming_deadlines(self) -> list[dict[str, Any]]: ...
+
 
 # Configure logging
 logging.basicConfig(
@@ -17,12 +26,16 @@ logging.basicConfig(
 logger = logging.getLogger(__name__)
 
 # Global instances (will be initialized in main)
-moodle = None
+moodle: MoodleClientInterface | None = None
 notifier = TelegramNotifier()
 
 
 async def check_for_deadlines():
     """Main task to fetch deadlines and notify."""
+    if moodle is None:
+        logger.error("Moodle client not initialized")
+        return
+
     logger.info("Checking for new deadlines...")
     deadlines = moodle.get_upcoming_deadlines()
 

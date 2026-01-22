@@ -1,7 +1,8 @@
-import requests
 import logging
-from typing import List, Dict, Optional
-from config import MOODLE_URL, MOODLE_USERNAME, MOODLE_PASSWORD
+
+import requests
+
+from config import MOODLE_PASSWORD, MOODLE_URL, MOODLE_USERNAME
 
 logger = logging.getLogger(__name__)
 
@@ -34,7 +35,7 @@ class MoodleClient:
             logger.error(f"Moodle authentication error: {e}")
             return False
 
-    def _call_ws(self, function: str, params: Dict = None) -> Optional[Dict]:
+    def _call_ws(self, function: str, params: dict | None = None) -> dict | None:
         """Call a Moodle web service function."""
         if not self.token:
             if not self.authenticate():
@@ -56,7 +57,7 @@ class MoodleClient:
             logger.error(f"Error calling Moodle WS {function}: {e}")
             return None
 
-    def get_upcoming_deadlines(self) -> List[Dict]:
+    def get_upcoming_deadlines(self) -> list[dict]:
         """Fetch upcoming assignments and quizzes."""
         deadlines = []
 

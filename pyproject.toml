@@ -38,5 +38,5 @@ quote-style = "double"
 indent-style = "space"
 
 [tool.ty]
-python-version = "3.12"
-diagnostic-mode = "workspace"
+# Configuration for ty type checker
+# rules can be configured in [tool.ty.rules]
