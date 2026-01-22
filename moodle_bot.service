@@ -1,0 +1,15 @@
+[Unit]
+Description=Moodle Deadline Notification Bot
+After=network.target
+
+[Service]
+Type=simple
+User=your_user
+WorkingDirectory=/home/your_user/moodle_bot
+EnvironmentFile=/home/your_user/moodle_bot/.env
+ExecStart=/home/your_user/.cargo/bin/uv run main.py
+Restart=always
+RestartSec=10
+
+[Install]
+WantedBy=multi-user.target
