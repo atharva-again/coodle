@@ -61,11 +61,11 @@ async def check_for_deadlines():
                     f"Don't miss it! 🚀"
                 )
 
-                await notifier.send_notification(message)
-                await mark_as_notified(
-                    deadline["id"], deadline["title"], deadline["due_date"]
-                )
-                count += 1
+                if await notifier.send_notification(message):
+                    await mark_as_notified(
+                        deadline["id"], deadline["title"], deadline["due_date"]
+                    )
+                    count += 1
 
     logger.info(f"Check complete. Sent {count} new notifications.")
 

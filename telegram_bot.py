@@ -18,19 +18,25 @@ class TelegramNotifier:
             self.bot = Bot(token=TELEGRAM_BOT_TOKEN)
         self.chat_id = TELEGRAM_CHAT_ID
 
-    async def send_notification(self, message: str):
+    async def send_notification(self, message: str) -> bool:
         """Send a message to the configured Telegram chat."""
         if not self.bot:
             logger.error("Telegram bot not initialized")
-            return
+            return False
         if not self.chat_id:
             logger.error("TELEGRAM_CHAT_ID not configured")
-            return
+            return False
 
         try:
+            # Increase read_timeout to handle slow connections
             await self.bot.send_message(
-                chat_id=self.chat_id, text=message, parse_mode=ParseMode.HTML
+                chat_id=self.chat_id,
+                text=message,
+                parse_mode=ParseMode.HTML,
+                read_timeout=30,
             )
             logger.info("Telegram notification sent")
+            return True
         except Exception as e:
             logger.error(f"Error sending Telegram notification: {e}")
+            return False
